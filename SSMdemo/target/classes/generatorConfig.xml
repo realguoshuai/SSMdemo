@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration    
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"    
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+  
+<generatorConfiguration>
+	<!--location 指: sql-connector.jar的位置 -->
+	<properties url="file:////D:/A-JavaProjectFor104/WorkspaceSecond/Day31Video/src/main/resources/db.properties"/>
+	<classPathEntry
+		location="D:\RepositoryWeb\maven\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar" />
+	<!-- id随意 -->
+	<context id="MySQL" targetRuntime="MyBatis3">
+		<!-- 配置生成的文件的注释规则 -->
+		<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!--数据库链接URL，用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="${db.driverUrl}" userId="${db.username}" password="${db.password}" />
+		<!--是否启用java.math.BigDecimal ,要不要开启数据库的resolver-->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<!-- 生成的实体类的位置(在*包下生成*类) -->
+		<!-- 注意: 1. 如果使用命令行生成则: targetProject 代表工程的全路径 2. 如果使用插件生成则:直接是工程名,如: targetProject="MyBatisBaseDemo" -->
+		<javaModelGenerator targetPackage="org.gs.model"
+			targetProject="Day34Video\mybatisGenerator">
+			<property name="rootClass" value="org.gs.model.BaseEntity"/>
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="false" />
+		</javaModelGenerator>
+		
+		<!-- 配置mapping的xml文件的位置 -->
+		<sqlMapGenerator targetPackage="org.gs.mapperxml"
+			targetProject="Day34Video\mybatisGenerator">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetProject="Day34Video\mybatisGenerator" targetPackage="org.gs.mapper">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
+		 <table tableName="users" domainObjectName="User"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="admin" domainObjectName="Admin"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table> 
+		<table tableName="course" domainObjectName="Course"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="speaker" domainObjectName="Speaker"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="video" domainObjectName="Video"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="subject" domainObjectName="Subject"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+	</context>
+</generatorConfiguration>   

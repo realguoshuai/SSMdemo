@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gs.model.Course">
+  <resultMap id="BaseResultMap" type="org.gs.model.Course">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.gs.model.Course">
+    <result column="course_desc" jdbcType="LONGVARCHAR" property="courseDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, subject_id
+  </sql>
+  <sql id="Blob_Column_List">
+    course_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询全部 -->
+   <select id="selectAll" parameterType="java.lang.Integer"    resultMap="ResultMapWithBLOBs">
+    select * from course
+    where 
+    subject_id = #{subject_id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.gs.model.Course">
+    insert into course (id, name, subject_id, 
+      course_desc)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subjectId,jdbcType=INTEGER}, 
+      #{courseDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.gs.model.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="courseDesc != null">
+        course_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="courseDesc != null">
+        #{courseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.gs.model.Course">
+    update course
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="courseDesc != null">
+        course_desc = #{courseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.gs.model.Course">
+    update course
+    set name = #{name,jdbcType=VARCHAR},
+      subject_id = #{subjectId,jdbcType=INTEGER},
+      course_desc = #{courseDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.gs.model.Course">
+    update course
+    set name = #{name,jdbcType=VARCHAR},
+      subject_id = #{subjectId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="selectAny" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select
+		${columns}
+		from course
+		where
+		${conditions}
+	</select>
+
+	<select id="selectMapById" parameterType="java.lang.Integer"
+		resultType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from course
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectAllForPager" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select 
+		*
+		from course
+	</select>
+
+	<select id="selectCount" statementType="STATEMENT" resultType="java.lang.Integer">
+		select COUNT(*) from course
+	</select>
+</mapper>

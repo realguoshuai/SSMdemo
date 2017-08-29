@@ -1,0 +1,13 @@
+sql文件的执行顺序原则;先运行没有外键的表
+
+先运行没有外键的是:
+	admin.sql
+	user.sql
+	speaker.sql
+	subject.sql
+
+然后再运行有外键的:
+	course.sql
+	video.sql
+	
+	2017-8-24 11:58:47

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gs.model.Admin">
+  <resultMap id="BaseResultMap" type="org.gs.model.Admin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="roles" jdbcType="VARCHAR" property="roles" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, pwd, roles
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin		
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.gs.model.Admin">
+    insert into admin (id, name, pwd, 
+      roles)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{roles,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.gs.model.Admin">
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="roles != null">
+        roles,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null">
+        #{roles,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.gs.model.Admin">
+    update admin
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null">
+        roles = #{roles,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.gs.model.Admin">
+    update admin
+    set name = #{name,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      roles = #{roles,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAny" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select
+		${columns}
+		from admin
+		where
+		${conditions}
+	</select>
+
+	<select id="selectMapById" parameterType="java.lang.Integer"
+		resultType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from admin
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectAllForPager" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select 
+		*
+		from admin
+	</select>
+
+	<select id="selectCount" statementType="STATEMENT" resultType="java.lang.Integer">
+		select COUNT(*) from admin
+	</select>
+</mapper>

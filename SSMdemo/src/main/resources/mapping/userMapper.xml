@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gs.model.User">
+	<!-- userMapper小飞鸟根据SQL语句生成 -->
+	<!-- resultMap(结果映射):处理数据转换,把数据中的列,转入成user类中的属性 -->
+	<resultMap id="BaseResultMap" type="org.gs.model.User">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="pwd" jdbcType="VARCHAR" property="pwd" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="gender" jdbcType="BIT" property="gender" />
+		<result column="birthday" jdbcType="DATE" property="birthday" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="imgUrl" jdbcType="VARCHAR" property="imgurl" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+	</resultMap>
+
+	<!-- <resultMap id="columnMap" type="java.util.Map"> <id column="id" jdbcType="INTEGER" 
+		property="id" /> <result column="name" jdbcType="VARCHAR" property="name" 
+		/> <result column="gender" jdbcType="BIT" property="gender" /> <result column="birthday" 
+		jdbcType="DATE" property="birthday" /> <result column="address" jdbcType="VARCHAR" 
+		property="address" /> <result column="mobile" jdbcType="VARCHAR" property="mobile" 
+		/> <result column="pwd" jdbcType="VARCHAR" property="pwd" /> <result column="code" 
+		jdbcType="VARCHAR" property="code" /> <result column="email" jdbcType="VARCHAR" 
+		property="email" /> <result column="imgUrl" jdbcType="VARCHAR" property="imgurl" 
+		/> <result column="createTime" jdbcType="TIMESTAMP" property="createtime" 
+		/> </resultMap> -->
+
+	<sql id="Base_Column_List">
+		id,  email, mobile,pwd, code,name, gender, birthday, address,  imgUrl,
+		createTime
+	</sql>
+	<!-- 拼接SQL语句 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from users
+		where id = #{id,jdbcType=INTEGER}<!-- {id(传入的参数),jdbcType=INTEGER(什么类型)}实例化一个代理,再传入进来 -->
+	</select>
+
+	<!-- resultMap:columnMap注释, resultMap="columnMap"改为resultType="java.util.Map" -->
+	<select id="selectMapById" parameterType="java.lang.Integer"
+		resultType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from users
+		where id = #{id,jdbcType=INTEGER}<!-- {id(传入的参数),jdbcType=INTEGER(什么类型)}实例化一个代理,再传入进来 -->
+	</select>
+
+
+
+<select id="selectByEmail" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select  
+		email,pwd,name 
+		from users
+		where email = #{value,jdbcType=VARCHAR}<!-- {id(传入的参数),jdbcType=INTEGER(什么类型)}实例化一个代理,再传入进来 -->
+	</select>
+
+
+
+
+
+
+
+	<!-- resultType 数据库中返回一条的类型(必须是java中的类型),而不是方法的返回类型 resultMap 可以是自带数据类型,也可以是自己写的一个东西 -->
+	<select id="selectAny" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select
+		${columns}
+		from users
+		where
+		${conditions}
+	</select>
+	<select id="selectAllForPager" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select *
+		from users
+	</select>
+	<select id="selectCount" statementType="STATEMENT" resultType="java.lang.Integer">
+		select COUNT(*) from users
+	</select>
+
+	<select id="selectAll" statementType="STATEMENT" resultType="java.lang.String"
+	resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from users
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from users
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<!-- 老师新加 -->
+	<!-- <delete id="deleteByCondition" parameterType="java.lang.String"> <if 
+		test="condition!=null"> delete from users where #{condition,jdbcType=String} 
+		</if> </delete> -->
+	<delete id="deleteByName" parameterType="java.lang.String">
+		<if test="value != null"><!-- -->
+			delete from users
+			where name like #{value,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<insert id="insert" parameterType="org.gs.model.User">
+		insert into users (id, name, gender,
+		birthday, address, mobile,
+		pwd, code, email, imgUrl,
+		createTime)
+		values
+		(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=BIT},
+		#{birthday,jdbcType=DATE}, #{address,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{pwd,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{imgurl,jdbcType=VARCHAR},
+		#{createtime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<!-- 判断字段是是否为空 -->
+	<insert id="insertSelective" parameterType="org.gs.model.User">
+		insert into users
+		<trim prefix="(" suffix=")" suffixOverrides=","><!-- prefix前缀 suffix后缀 
+				suffixOverrides把最后一个,去掉 -->
+			<!-- <if test="id != null"> id, </if> -->
+			<if test="name != null">
+				name,
+			</if>
+			<if test="gender != null">
+				gender,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="pwd != null">
+				pwd,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="imgurl != null">
+				imgUrl,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				#{gender,jdbcType=BIT},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="pwd != null">
+				#{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="imgurl != null">
+				#{imgurl,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateByPrimaryKeySelective" parameterType="org.gs.model.User">
+		update users
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				gender = #{gender,jdbcType=BIT},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="pwd != null">
+				pwd = #{pwd,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="imgurl != null">
+				imgUrl = #{imgurl,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+
+	<update id="updateByPrimaryKey" parameterType="org.gs.model.User">
+		update users
+		set name = #{name,jdbcType=VARCHAR},
+		gender = #{gender,jdbcType=BIT},
+		birthday = #{birthday,jdbcType=DATE},
+		address = #{address,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		pwd = #{pwd,jdbcType=VARCHAR},
+		code = #{code,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		imgUrl = #{imgurl,jdbcType=VARCHAR},
+		createTime = #{createtime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

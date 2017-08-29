@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.gs.model.Video">
+  <resultMap id="BaseResultMap" type="org.gs.model.Video">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="spearker_id" jdbcType="INTEGER" property="spearkerId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="play_num" jdbcType="INTEGER" property="playNum" />
+  </resultMap>
+  
+  	<resultMap id="videoSimpleResult" type="org.gs.model.VideoSimple">
+		 <id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="time" jdbcType="INTEGER" property="time" />
+		<result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+		<result column="play_num" jdbcType="INTEGER" property="playNum" />
+	</resultMap>
+	
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.gs.model.Video">
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
+  
+  
+  
+  <sql id="Base_Column_List">
+    id, name, time, spearker_id, course_id, video_url, image_url, play_num
+  </sql>
+  
+  <sql id="simpleColumnList">
+  id, name,time,image_url, play_num
+  </sql>
+  
+  <sql id="Blob_Column_List">
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from video
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectMapByCourseId" parameterType="java.lang.Integer"
+   resultType="java.util.Map">
+    select 
+    <include refid="Blob_Column_List" />
+    from video
+    where course_id = #{course_id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from video
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.gs.model.Video">
+    insert into video (id, title, time, 
+      spearker_id, course_id, video_url, 
+      image_url, play_num, detail
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER}, 
+      #{spearkerId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{videoUrl,jdbcType=VARCHAR}, 
+      #{imageUrl,jdbcType=VARCHAR}, #{playNum,jdbcType=INTEGER}, #{detail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.gs.model.Video">
+    insert into video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="spearkerId != null">
+        spearker_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
+      <if test="imageUrl != null">
+        image_url,
+      </if>
+      <if test="playNum != null">
+        play_num,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=INTEGER},
+      </if>
+      <if test="spearkerId != null">
+        #{spearkerId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="playNum != null">
+        #{playNum,jdbcType=INTEGER},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.gs.model.Video">
+    update video
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=INTEGER},
+      </if>
+      <if test="spearkerId != null">
+        spearker_id = #{spearkerId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null">
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="playNum != null">
+        play_num = #{playNum,jdbcType=INTEGER},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.gs.model.Video">
+    update video
+    set title = #{title,jdbcType=VARCHAR},
+      time = #{time,jdbcType=INTEGER},
+      spearker_id = #{spearkerId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      play_num = #{playNum,jdbcType=INTEGER},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.gs.model.Video">
+    update video
+    set title = #{title,jdbcType=VARCHAR},
+      time = #{time,jdbcType=INTEGER},
+      spearker_id = #{spearkerId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      play_num = #{playNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+  <!-- 4个信息 -->
+  <!-- 根据课程id查询Video集合 -->
+<!--   <select id="selectAllByCourseId" parameterType="java.lang.Integer"
+   resultType="java.util.Map">
+    select 
+    <include refid="simpleColumnList" />
+    from video
+    where course_id = #{course_id,jdbcType=INTEGER}
+  </select>
+  -->
+ 
+ 	<select id="selectAllByCourseId" parameterType="java.lang.Integer"
+		resultMap="videoSimpleResult">
+		select
+		<include refid="simpleColumnList" />
+		from video
+		where course_id = #{course_id,jdbcType=INTEGER}
+	</select>
+	<!--  -->
+	<select id="selectAllForVideoByCourseId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from video
+		where course_id = #{course_id,jdbcType=INTEGER}
+	</select>
+ 
+ 
+ 
+ 
+ 
+ 
+  <!--  resultType 数据库中返回一条的类型(必须是java中的类型),而不是方法的返回类型
+  		resultMap  可以是自带数据类型,也可以是自己写的一个东西-->
+   <select id="selectAny" parameterType="java.util.Map" 
+   statementType="STATEMENT" resultType="java.util.Map">
+    select 
+    ${columns}
+    from video
+    where 
+    ${conditions}
+  </select>
+  <select id="selectAllForPager" parameterType="java.util.Map"
+		statementType="STATEMENT" resultType="java.util.Map">
+		select *
+		from video
+	</select>
+	<select id="selectCount" statementType="STATEMENT" resultType="java.lang.Integer">
+		select COUNT(*) from video
+	</select>
+  <delete id="deleteByName" parameterType="java.lang.String">
+  <if test="value != null"><!--  -->
+   delete from video
+    where name like #{value,jdbcType=VARCHAR}
+  </if>
+    </delete>
+  
+</mapper>
